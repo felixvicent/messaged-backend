@@ -4,6 +4,20 @@ import bcrypt from "bcrypt";
 import User from "../models/User";
 
 class UserController {
+  async index(request: Request, response: Response) {
+    try {
+      const { id } = request.params;
+
+      const users = await User.find({
+        _id: { $ne: id },
+      }).select(["email", "username", "avatarImage", "_id"]);
+
+      response.json(users);
+    } catch (error) {
+      return response.status(500).json({ message: "Server Internal Error" });
+    }
+  }
+
   async store(request: Request, response: Response) {
     try {
       const { username, email, password } = request.body;
