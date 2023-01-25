@@ -35,6 +35,22 @@ class UserController {
       return response.status(500).json({ message: "Server Internal Error" });
     }
   }
+
+  async changeAvatar(request: Request, response: Response) {
+    try {
+      const { id } = request.params;
+      const { image } = request.body;
+
+      const user = await User.findByIdAndUpdate(id, {
+        isAvatarImageSet: true,
+        avatarImage: image,
+      });
+
+      return response.sendStatus(204);
+    } catch (error) {
+      return response.status(500).json({ message: "Server Internal Error" });
+    }
+  }
 }
 
 export default new UserController();
